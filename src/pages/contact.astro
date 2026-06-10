@@ -1,13 +1,14 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-// Formspree などのフォームサービスに登録して、発行されたエンドポイントに差し替えてください。
-// 例: https://formspree.io/f/xxxxxxxx
-const FORM_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
+// エックスサーバー上の PHP（public/mail.php）でメールを送信する。
+// public/ 配下のファイルはビルド時にサイト直下へコピーされるため /mail.php で動作する。
+const FORM_ENDPOINT = "/mail.php";
 
-const EMAIL = "blue.blue210@gmail.com";
-// ご自身のGitHubユーザー名に差し替えてください。
-const GITHUB_URL = "https://github.com/your-username";
+const EMAIL = "info@dokkoi.jp";
+const GITHUB_URL = "https://github.com/miton310";
+const X_URL = "https://x.com/UptownGirlsBand";
+const QIITA_URL = "https://qiita.com/miton";
 ---
 
 <BaseLayout title="Contact | Portfolio" description="お仕事のご依頼・ご相談はこちらから。">
@@ -31,6 +32,26 @@ const GITHUB_URL = "https://github.com/your-username";
           <p class="channel-label">GitHub</p>
           <p class="channel-value">{GITHUB_URL.replace("https://", "")}</p>
           <p class="channel-note">コードや活動状況はこちら</p>
+        </a>
+        <a
+          href={X_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="card channel"
+        >
+          <p class="channel-label">X</p>
+          <p class="channel-value">@{X_URL.split("/").pop()}</p>
+          <p class="channel-note">日々の発信はこちら</p>
+        </a>
+        <a
+          href={QIITA_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="card channel"
+        >
+          <p class="channel-label">Qiita</p>
+          <p class="channel-value">{QIITA_URL.replace("https://", "")}</p>
+          <p class="channel-note">技術記事はこちら</p>
         </a>
       </div>
 
@@ -58,6 +79,14 @@ const GITHUB_URL = "https://github.com/your-username";
               required
               placeholder="ご依頼内容、ご予算、希望納期などをお書きください"></textarea>
           </label>
+          {/* スパム対策のハニーポット（人間には見えない・入力されたらボット扱い） */}
+          <div class="hp" aria-hidden="true">
+            <label>
+              Webサイト
+              <input type="text" name="website" tabindex="-1" autocomplete="off" />
+            </label>
+          </div>
+          <p class="form-status" role="status" aria-live="polite"></p>
           <button type="submit" class="btn btn-primary">送信する</button>
         </form>
       </div>
@@ -66,6 +95,57 @@ const GITHUB_URL = "https://github.com/your-username";
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>(".contact-form");
+  const statusEl = document.querySelector<HTMLParagraphElement>(".form-status");
+
+  if (form && statusEl) {
+    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      statusEl.textContent = "";
+      statusEl.className = "form-status";
+      if (button) {
+        button.disabled = true;
+        button.textContent = "送信中…";
+      }
+
+      try {
+        const response = await fetch(form.action, {
+          method: "POST",
+          body: new FormData(form),
+          headers: { "X-Requested-With": "XMLHttpRequest" },
+        });
+        const data = await response
+          .json()
+          .catch(() => ({ ok: response.ok, message: "" }));
+
+        if (response.ok && data.ok) {
+          form.reset();
+          statusEl.textContent =
+            data.message || "お問い合わせを送信しました。ありがとうございます。";
+          statusEl.classList.add("is-success");
+        } else {
+          statusEl.textContent =
+            data.message ||
+            "送信に失敗しました。お手数ですが時間をおいて再度お試しください。";
+          statusEl.classList.add("is-error");
+        }
+      } catch {
+        statusEl.textContent =
+          "通信エラーが発生しました。メールでのご連絡もご検討ください。";
+        statusEl.classList.add("is-error");
+      } finally {
+        if (button) {
+          button.disabled = false;
+          button.textContent = "送信する";
+        }
+      }
+    });
+  }
+</script>
 
 <style>
   .contact-container {
@@ -178,6 +258,39 @@ const GITHUB_URL = "https://github.com/your-username";
     font: inherit;
     font-weight: 700;
     justify-self: start;
+  }
+
+  button.btn:disabled {
+    opacity: 0.6;
+    cursor: progress;
+  }
+
+  /* ハニーポット（画面外に隠す） */
+  .hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  /* 送信結果メッセージ */
+  .form-status {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+
+  .form-status:empty {
+    display: none;
+  }
+
+  .form-status.is-success {
+    color: var(--c-teal);
+  }
+
+  .form-status.is-error {
+    color: var(--c-accent);
   }
 
   .contact-note {

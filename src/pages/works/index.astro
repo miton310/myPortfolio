@@ -16,20 +16,32 @@ const categories = [...new Set(works.map((work) => work.data.category))];
       <h1 class="section-title">Works</h1>
       <p class="section-sub">これまでの制作実績</p>
 
-      <div class="filter" role="group" aria-label="カテゴリで絞り込み">
-        <button class="filter-btn active" data-category="all">すべて</button>
-        {
-          categories.map((category) => (
-            <button class="filter-btn" data-category={category}>
-              {category}
-            </button>
-          ))
-        }
-      </div>
+      {
+        works.length === 0 ? (
+          <p class="empty-state">
+            制作実績は準備中です。近日中に掲載予定です。
+          </p>
+        ) : (
+          <>
+            <div class="filter" role="group" aria-label="カテゴリで絞り込み">
+              <button class="filter-btn active" data-category="all">
+                すべて
+              </button>
+              {categories.map((category) => (
+                <button class="filter-btn" data-category={category}>
+                  {category}
+                </button>
+              ))}
+            </div>
 
-      <div class="works-grid">
-        {works.map((work) => <WorkCard work={work} />)}
-      </div>
+            <div class="works-grid">
+              {works.map((work) => (
+                <WorkCard work={work} />
+              ))}
+            </div>
+          </>
+        )
+      }
     </div>
   </section>
 </BaseLayout>

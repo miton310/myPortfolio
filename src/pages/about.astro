@@ -3,19 +3,34 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 const career = [
   {
-    period: "2019 - 2022",
-    title: "Web制作会社",
-    body: "コーポレートサイト・ECサイトの制作にコーダーとして従事。WordPressのテーマ開発を多数担当。",
+    period: "",
+    title: "埼玉県私立高校普通科 卒業",
+    body: "",
   },
   {
-    period: "2022 - 2025",
-    title: "事業会社(自社サービス)",
-    body: "自社WebサービスのフロントエンドをReact/TypeScriptで開発。バックエンドAPIや業務自動化ツールの開発も担当。",
+    period: "",
+    title: "関西学院大学文学部日本文学科 卒業",
+    body: "卒論のテーマは村上龍の小説。実はゴリゴリの文系出身です。",
   },
   {
-    period: "2025 -",
-    title: "フリーランスとして独立",
-    body: "Webサイト制作・Webアプリ開発・業務自動化を中心に、設計から運用まで一貫して対応。",
+    period: "",
+    title: "人材派遣会社 営業",
+    body: "法人営業として朝から晩まで駆け回ってました。当時の同期とは今でも仲が良い。",
+  },
+  {
+    period: "",
+    title: "専門学校グラフィックデザイン科 卒業",
+    body: "",
+  },
+  {
+    period: "2014 - 2020",
+    title: "東京のWeb制作会社",
+    body: "",
+  },
+  {
+    period: "2020 - ",
+    title: "広島のWeb制作会社に勤務。フリーランスとしても活動開始",
+    body: "",
   },
 ];
 
@@ -74,12 +89,13 @@ const workflow = [
       <p class="section-sub">自己紹介</p>
       <div class="intro">
         <p>
-          はじめまして。フリーランスエンジニアとして、Webサイト制作・Webアプリ開発・業務自動化を手がけています。
-          Web制作会社と事業会社での開発経験を経て独立しました。
+          はじめまして、フリーランスエンジニアのmiton310です。Webサイト制作からWebアプリ開発、業務の自動化まで、「Webまわりのこと」をひと通りやっています。
         </p>
         <p>
-          大切にしているのは「作って終わり」にしないこと。公開後にどう成果へつなげるかまで考えて、
-          設計・実装・運用に取り組んでいます。技術選定は流行ではなく、運用のしやすさと費用対効果を基準にご提案します。
+          文学部を出て営業職、そこからデザインを学んでWeb業界へ……と、けっこう回り道してきた経歴です。そのぶん、専門用語をかみくだいて話すのは得意なほうだと思います。
+        </p>
+        <p>
+          大切にしているのは「作って終わり」にしないこと。公開したあと、ちゃんと成果につながるところまで一緒に考えます。技術選びも流行りものに飛びつくのではなく、「あとで運用しやすいか」「費用に見合うか」を基準にご提案しています。
         </p>
       </div>
     </div>
@@ -96,7 +112,7 @@ const workflow = [
               <p class="timeline-period">{item.period}</p>
               <div class="timeline-body">
                 <h3 class="timeline-title">{item.title}</h3>
-                <p class="timeline-text">{item.body}</p>
+                {item.body && <p class="timeline-text">{item.body}</p>}
               </div>
             </li>
           ))

@@ -49,28 +49,34 @@ const skillCategories = [
     skills: [
       {
         name: "Node.js / Express",
-        level: 4,
-        years: "3年",
+        level: 1,
+        years: "1年",
         note: "REST API開発、認証、外部API連携",
       },
       {
-        name: "PHP / Laravel",
-        level: 3,
+        name: "Ruby / Ruby on Rails",
+        level: 4,
         years: "3年",
-        note: "業務系Webアプリ、WordPressプラグイン開発",
+        note: "業務系WebアプリのCRUD開発、Active Recordを用いたDB設計、API実装",
+      },
+      {
+        name: "PHP / Laravel",
+        level: 2,
+        years: "3年",
+        note: "業務系Webアプリの開発",
       },
       {
         name: "Python",
-        level: 3,
+        level: 2,
         years: "2年",
-        note: "API開発(FastAPI)、データ処理・スクレイピング",
+        note: "データ処理・スクレイピング",
       },
-      {
-        name: "API設計",
-        level: 4,
-        years: "3年",
-        note: "RESTful設計、OpenAPIによるドキュメント整備",
-      },
+      // {
+      //   name: "API設計",
+      //   level: 4,
+      //   years: "3年",
+      //   note: "RESTful設計、OpenAPIによるドキュメント整備",
+      // },
     ],
   },
   {
@@ -130,8 +136,8 @@ const skillCategories = [
     skills: [
       {
         name: "GAS(Google Apps Script)",
-        level: 4,
-        years: "3年",
+        level: 2,
+        years: "1年",
         note: "スプレッドシート連携、定型業務・レポートの自動化",
       },
       {
@@ -153,6 +159,15 @@ const skillCategories = [
         note: "Authentication / Firestore を用いた小規模アプリ開発",
       },
     ],
+  },
+];
+
+// 保有資格
+const certifications = [
+  {
+    name: "基本情報技術者",
+    issuer: "情報処理推進機構（IPA）",
+    note: "ITの基礎知識・アルゴリズム・システム開発を体系的に証明する国家試験。",
   },
 ];
 ---
@@ -203,6 +218,23 @@ const skillCategories = [
           </div>
         ))
       }
+
+      <div class="skill-category reveal">
+        <h2 class="category-title">資格・認定</h2>
+        <ul class="cert-list">
+          {
+            certifications.map((cert) => (
+              <li class="card cert-row">
+                <div class="cert-head">
+                  <p class="cert-name">{cert.name}</p>
+                  <p class="cert-issuer">{cert.issuer}</p>
+                </div>
+                <p class="cert-note">{cert.note}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
     </div>
   </section>
 </BaseLayout>
@@ -210,6 +242,46 @@ const skillCategories = [
 <style>
   .skills-container {
     max-width: 820px;
+  }
+
+  /* 資格・認定 */
+  .cert-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .cert-row {
+    padding: 1.1rem 1.4rem;
+    border-left: 3px solid var(--c-teal);
+  }
+
+  .cert-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+  }
+
+  .cert-name {
+    margin: 0;
+    font-weight: 700;
+    font-size: 0.98rem;
+  }
+
+  .cert-issuer {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--c-text-soft);
+  }
+
+  .cert-note {
+    margin: 0.4rem 0 0;
+    font-size: 0.85rem;
+    color: var(--c-text-soft);
   }
 
   .legend {

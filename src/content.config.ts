@@ -25,4 +25,20 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { works, blog };
+// 自分で運用しているサイト（自社メディア・サービス・継続運用案件など）
+const sites = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/sites" }),
+  schema: z.object({
+    title: z.string(),
+    url: z.string().url(),
+    description: z.string(),
+    category: z.string(),
+    role: z.string().default("企画・開発・運用"),
+    status: z.enum(["運用中", "リニューアル中", "公開停止"]).default("運用中"),
+    tags: z.array(z.string()).default([]),
+    since: z.coerce.date().optional(),
+    order: z.number().default(0),
+  }),
+});
+
+export const collections = { works, blog, sites };

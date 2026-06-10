@@ -27,14 +27,14 @@ const strengths = [
 
 const stackSummary = [
   { category: "フロントエンド", items: ["HTML/CSS", "TypeScript", "React", "Next.js", "Astro"] },
-  { category: "バックエンド", items: ["Node.js", "PHP/Laravel", "Python", "REST API"] },
+  { category: "バックエンド", items: ["Node.js", "Ruby on Rails", "PHP/Laravel", "Python", "REST API"] },
   { category: "CMS / EC", items: ["WordPress", "microCMS", "Shopify"] },
   { category: "インフラ", items: ["AWS", "Vercel", "Docker", "GitHub Actions"] },
   { category: "自動化 / DB", items: ["GAS", "PostgreSQL", "MySQL", "Firebase"] },
 ];
 ---
 
-<BaseLayout title="Portfolio | フリーランスエンジニア">
+<BaseLayout title="miton310's Portfolio">
   <!-- Hero -->
   <section class="hero">
     <div class="container hero-inner">
@@ -74,18 +74,26 @@ const stackSummary = [
   </section>
 
   <!-- Featured Works -->
-  <section class="section section-tint">
-    <div class="container reveal">
-      <h2 class="section-title">Featured Works</h2>
-      <p class="section-sub">最近の制作実績</p>
-      <div class="works-grid">
-        {works.map((work) => <WorkCard work={work} />)}
-      </div>
-      <p class="works-more">
-        <a href="/works/" class="btn btn-outline">すべての実績を見る</a>
-      </p>
-    </div>
-  </section>
+  {
+    works.length > 0 && (
+      <section class="section section-tint">
+        <div class="container reveal">
+          <h2 class="section-title">Featured Works</h2>
+          <p class="section-sub">最近の制作実績</p>
+          <div class="works-grid">
+            {works.map((work) => (
+              <WorkCard work={work} />
+            ))}
+          </div>
+          <p class="works-more">
+            <a href="/works/" class="btn btn-outline">
+              すべての実績を見る
+            </a>
+          </p>
+        </div>
+      </section>
+    )
+  }
 
   <!-- Strengths -->
   <section class="section">
@@ -137,7 +145,7 @@ const stackSummary = [
       <div class="cta card">
         <h2 class="cta-title">お仕事のご相談を受け付けています</h2>
         <p class="cta-text">
-          「こんなことはできる?」という段階のご相談も歓迎です。まずはお気軽にご連絡ください。
+          「こんなことってできますか?」くらいの、ふわっとした段階のご相談も大歓迎です。お気軽にどうぞ。
         </p>
         <a href="/contact/" class="btn btn-primary">お問い合わせはこちら</a>
       </div>

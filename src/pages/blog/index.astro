@@ -22,38 +22,46 @@ const formatDate = (date: Date) =>
       <h1 class="section-title">Blog / Notes</h1>
       <p class="section-sub">技術記事・学習ログ・運用メモ</p>
 
-      <div class="filter" role="group" aria-label="カテゴリで絞り込み">
-        <button class="filter-btn active" data-category="all">すべて</button>
-        {
-          categories.map((category) => (
-            <button class="filter-btn" data-category={category}>
-              {category}
-            </button>
-          ))
-        }
-      </div>
+      {
+        posts.length === 0 ? (
+          <p class="empty-state">記事は準備中です。近日中に投稿予定です。</p>
+        ) : (
+          <>
+            <div class="filter" role="group" aria-label="カテゴリで絞り込み">
+              <button class="filter-btn active" data-category="all">
+                すべて
+              </button>
+              {categories.map((category) => (
+                <button class="filter-btn" data-category={category}>
+                  {category}
+                </button>
+              ))}
+            </div>
 
-      <ul class="post-list">
-        {
-          posts.map((post) => (
-            <li class="post-item" data-category={post.data.category}>
-              <a href={`/blog/${post.id}/`} class="card post-card">
-                <div class="post-meta">
-                  <span class="post-cat">{post.data.category}</span>
-                  <span class="post-date">{formatDate(post.data.date)}</span>
-                </div>
-                <h2 class="post-title">{post.data.title}</h2>
-                <p class="post-desc">{post.data.description}</p>
-                <div class="post-tags">
-                  {post.data.tags.map((tag) => (
-                    <span class="tag">{tag}</span>
-                  ))}
-                </div>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
+            <ul class="post-list">
+              {posts.map((post) => (
+                <li class="post-item" data-category={post.data.category}>
+                  <a href={`/blog/${post.id}/`} class="card post-card">
+                    <div class="post-meta">
+                      <span class="post-cat">{post.data.category}</span>
+                      <span class="post-date">
+                        {formatDate(post.data.date)}
+                      </span>
+                    </div>
+                    <h2 class="post-title">{post.data.title}</h2>
+                    <p class="post-desc">{post.data.description}</p>
+                    <div class="post-tags">
+                      {post.data.tags.map((tag) => (
+                        <span class="tag">{tag}</span>
+                      ))}
+                    </div>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </>
+        )
+      }
     </div>
   </section>
 </BaseLayout>
