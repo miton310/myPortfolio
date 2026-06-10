@@ -1,0 +1,106 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const works = await getCollection("works");
+  return works.map((work) => ({
+    params: { id: work.id },
+    props: { work },
+  }));
+}
+
+const { work } = Astro.props;
+const { Content } = await render(work);
+
+const formatDate = (date: Date) =>
+  date.toLocaleDateString("ja-JP", { year: "numeric", month: "long" });
+---
+
+<BaseLayout
+  title={`${work.data.title} | Works`}
+  description={work.data.description}
+>
+  <article class="section">
+    <div class="container article-container">
+      <p class="article-meta">
+        <span class="article-cat">{work.data.category}</span>
+        <span class="article-date">{formatDate(work.data.date)}</span>
+      </p>
+      <h1 class="article-title">{work.data.title}</h1>
+      <div class="article-tags">
+        {work.data.tags.map((tag) => <span class="tag">{tag}</span>)}
+      </div>
+      {
+        work.data.url && (
+          <p>
+            <a href={work.data.url} target="_blank" rel="noopener noreferrer">
+              サイトを見る
+            </a>
+          </p>
+        )
+      }
+      <div class="prose">
+        <Content />
+      </div>
+      <p class="article-back">
+        <a href="/works/" class="btn btn-outline">実績一覧に戻る</a>
+      </p>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .article-container {
+    max-width: 720px;
+  }
+
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin: 0 0 0.5rem;
+  }
+
+  .article-cat {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--c-teal);
+    border: 1px solid rgba(0, 255, 157, 0.3);
+    border-radius: 4px;
+    padding: 0.05rem 0.55rem;
+  }
+
+  .article-date {
+    color: var(--c-text-soft);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+  }
+
+  .article-title {
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    margin: 0 0 1rem;
+  }
+
+  .article-tags {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+
+  .prose :global(h2) {
+    margin-top: 2.5rem;
+    padding-left: 0.7rem;
+    border-left: 4px solid var(--c-primary);
+    font-size: 1.3rem;
+  }
+
+  .prose :global(ul) {
+    padding-left: 1.4rem;
+  }
+
+  .article-back {
+    margin-top: 3rem;
+  }
+</style>

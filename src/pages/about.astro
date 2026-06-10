@@ -1,0 +1,320 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const career = [
+  {
+    period: "2019 - 2022",
+    title: "Web制作会社",
+    body: "コーポレートサイト・ECサイトの制作にコーダーとして従事。WordPressのテーマ開発を多数担当。",
+  },
+  {
+    period: "2022 - 2025",
+    title: "事業会社(自社サービス)",
+    body: "自社WebサービスのフロントエンドをReact/TypeScriptで開発。バックエンドAPIや業務自動化ツールの開発も担当。",
+  },
+  {
+    period: "2025 -",
+    title: "フリーランスとして独立",
+    body: "Webサイト制作・Webアプリ開発・業務自動化を中心に、設計から運用まで一貫して対応。",
+  },
+];
+
+const services = [
+  {
+    title: "Webサイト制作",
+    body: "コーポレートサイト・LP・採用サイトなど。デザインから実装・公開まで対応します。",
+  },
+  {
+    title: "Webアプリ開発",
+    body: "予約管理・社内ツールなどの業務系Webアプリを、フロントエンドからバックエンドまで開発します。",
+  },
+  {
+    title: "CMS / EC構築",
+    body: "WordPress・microCMS・Shopifyを用いた、更新しやすいサイト・ストアを構築します。",
+  },
+  {
+    title: "業務自動化",
+    body: "GASやPythonによる定型業務の自動化、スプレッドシート連携、データ集計の仕組みづくりを支援します。",
+  },
+];
+
+const workflow = [
+  {
+    step: "01",
+    title: "ヒアリング",
+    body: "目的・課題・ご予算を伺い、ゴールをすり合わせます。オンラインミーティング対応可。",
+  },
+  {
+    step: "02",
+    title: "ご提案・お見積り",
+    body: "課題に対する実現方法を複数案ご提示し、スケジュールと費用を明確にします。",
+  },
+  {
+    step: "03",
+    title: "設計・デザイン",
+    body: "情報設計とデザインカンプを作成し、認識を合わせてから実装に進みます。",
+  },
+  {
+    step: "04",
+    title: "実装・テスト",
+    body: "週次で進捗を共有しながら開発します。実機での動作確認・表示速度の調整まで実施します。",
+  },
+  {
+    step: "05",
+    title: "納品・運用サポート",
+    body: "公開作業まで対応。公開後の保守・改善のご相談も継続的にお受けします。",
+  },
+];
+---
+
+<BaseLayout title="About | Portfolio" description="自己紹介・経歴・対応領域・仕事の進め方について。">
+  <section class="section">
+    <div class="container about-container">
+      <h1 class="section-title">About</h1>
+      <p class="section-sub">自己紹介</p>
+      <div class="intro">
+        <p>
+          はじめまして。フリーランスエンジニアとして、Webサイト制作・Webアプリ開発・業務自動化を手がけています。
+          Web制作会社と事業会社での開発経験を経て独立しました。
+        </p>
+        <p>
+          大切にしているのは「作って終わり」にしないこと。公開後にどう成果へつなげるかまで考えて、
+          設計・実装・運用に取り組んでいます。技術選定は流行ではなく、運用のしやすさと費用対効果を基準にご提案します。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container about-container reveal">
+      <h2 class="section-title">Career</h2>
+      <p class="section-sub">経歴サマリー</p>
+      <ol class="timeline">
+        {
+          career.map((item) => (
+            <li class="timeline-item">
+              <p class="timeline-period">{item.period}</p>
+              <div class="timeline-body">
+                <h3 class="timeline-title">{item.title}</h3>
+                <p class="timeline-text">{item.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container about-container reveal">
+      <h2 class="section-title">Services</h2>
+      <p class="section-sub">対応領域</p>
+      <div class="service-grid">
+        {
+          services.map((item) => (
+            <div class="card service-card">
+              <h3 class="service-title">{item.title}</h3>
+              <p class="service-body">{item.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container about-container reveal">
+      <h2 class="section-title">Workflow</h2>
+      <p class="section-sub">仕事の進め方</p>
+      <ol class="flow">
+        {
+          workflow.map((item) => (
+            <li class="card flow-item">
+              <p class="flow-step">{item.step}</p>
+              <div>
+                <h3 class="flow-title">{item.title}</h3>
+                <p class="flow-body">{item.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+      <p class="about-cta">
+        <a href="/contact/" class="btn btn-primary">お問い合わせはこちら</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about-container {
+    max-width: 820px;
+  }
+
+  .section-alt {
+    background: linear-gradient(
+      to bottom right,
+      rgba(0, 229, 255, 0.04),
+      rgba(139, 92, 246, 0.07)
+    );
+  }
+
+  .intro p {
+    color: var(--c-text);
+    margin: 0 0 1.2rem;
+  }
+
+  /* 経歴タイムライン */
+  .timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0;
+  }
+
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 1.4rem;
+    position: relative;
+    padding: 0 0 2rem 0;
+  }
+
+  .timeline-item:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: 150px;
+    top: 1.6rem;
+    bottom: 0;
+    width: 1px;
+    background: var(--c-border);
+  }
+
+  .timeline-period {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--c-primary);
+    margin: 0.15rem 0 0;
+    text-align: right;
+  }
+
+  .timeline-body {
+    position: relative;
+    padding-left: 1.6rem;
+  }
+
+  .timeline-body::before {
+    content: "";
+    position: absolute;
+    left: -5px;
+    top: 0.45rem;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--c-primary);
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.6);
+  }
+
+  .timeline-title {
+    margin: 0 0 0.3rem;
+    font-size: 1.05rem;
+  }
+
+  .timeline-text {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--c-text-soft);
+  }
+
+  /* 対応領域 */
+  .service-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.4rem;
+  }
+
+  .service-card {
+    padding: 1.5rem 1.6rem;
+  }
+
+  .service-title {
+    margin: 0 0 0.5rem;
+    font-size: 1.05rem;
+    color: var(--c-primary);
+  }
+
+  .service-body {
+    margin: 0;
+    font-size: 0.88rem;
+    color: var(--c-text-soft);
+  }
+
+  /* 仕事の進め方 */
+  .flow {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .flow-item {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 1rem;
+    padding: 1.3rem 1.5rem;
+    align-items: start;
+  }
+
+  .flow-step {
+    font-family: var(--font-mono);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--c-teal);
+    margin: 0;
+  }
+
+  .flow-title {
+    margin: 0 0 0.3rem;
+    font-size: 1.02rem;
+  }
+
+  .flow-body {
+    margin: 0;
+    font-size: 0.88rem;
+    color: var(--c-text-soft);
+  }
+
+  .about-cta {
+    margin: 2.4rem 0 0;
+    text-align: center;
+  }
+
+  @media (max-width: 680px) {
+    .service-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .timeline-item {
+      grid-template-columns: 1fr;
+      gap: 0.3rem;
+    }
+
+    .timeline-item:not(:last-child)::after {
+      display: none;
+    }
+
+    .timeline-period {
+      text-align: left;
+    }
+
+    .timeline-body {
+      padding-left: 0;
+    }
+
+    .timeline-body::before {
+      display: none;
+    }
+  }
+</style>

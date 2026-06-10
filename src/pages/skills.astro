@@ -1,0 +1,317 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+// level: 1-5(5段階の習熟度)
+const skillCategories = [
+  {
+    name: "フロントエンド",
+    skills: [
+      {
+        name: "HTML / CSS",
+        level: 5,
+        years: "5年以上",
+        note: "セマンティックなマークアップ、レスポンシブ対応、CSSアニメーション",
+      },
+      {
+        name: "JavaScript",
+        level: 4,
+        years: "5年",
+        note: "ES2015+、DOM操作、非同期処理、パフォーマンス最適化",
+      },
+      {
+        name: "TypeScript",
+        level: 4,
+        years: "3年",
+        note: "型設計を意識した堅牢な実装、既存JSコードの段階的移行",
+      },
+      {
+        name: "React / Next.js",
+        level: 4,
+        years: "3年",
+        note: "SPA/SSR開発、状態管理、App Router、コンポーネント設計",
+      },
+      {
+        name: "Astro",
+        level: 4,
+        years: "2年",
+        note: "コンテンツ中心の高速な静的サイト構築、アイランドアーキテクチャ",
+      },
+      {
+        name: "Vue.js",
+        level: 3,
+        years: "2年",
+        note: "中規模SPAの開発・保守経験",
+      },
+    ],
+  },
+  {
+    name: "バックエンド",
+    skills: [
+      {
+        name: "Node.js / Express",
+        level: 4,
+        years: "3年",
+        note: "REST API開発、認証、外部API連携",
+      },
+      {
+        name: "PHP / Laravel",
+        level: 3,
+        years: "3年",
+        note: "業務系Webアプリ、WordPressプラグイン開発",
+      },
+      {
+        name: "Python",
+        level: 3,
+        years: "2年",
+        note: "API開発(FastAPI)、データ処理・スクレイピング",
+      },
+      {
+        name: "API設計",
+        level: 4,
+        years: "3年",
+        note: "RESTful設計、OpenAPIによるドキュメント整備",
+      },
+    ],
+  },
+  {
+    name: "CMS / EC",
+    skills: [
+      {
+        name: "WordPress",
+        level: 5,
+        years: "5年以上",
+        note: "オリジナルテーマ開発、カスタムフィールド設計、高速化・セキュリティ対策",
+      },
+      {
+        name: "microCMS",
+        level: 4,
+        years: "2年",
+        note: "ヘッドレスCMS構成でのサイト構築、API設計",
+      },
+      {
+        name: "Shopify",
+        level: 3,
+        years: "1年",
+        note: "テーマカスタマイズ(Liquid)、ストア構築",
+      },
+    ],
+  },
+  {
+    name: "インフラ",
+    skills: [
+      {
+        name: "AWS",
+        level: 3,
+        years: "2年",
+        note: "S3 / CloudFront / Lambda / EC2 を用いた構成・運用",
+      },
+      {
+        name: "Vercel / Netlify",
+        level: 4,
+        years: "3年",
+        note: "静的サイト・Next.jsアプリのデプロイ、プレビュー環境構築",
+      },
+      {
+        name: "Docker",
+        level: 3,
+        years: "2年",
+        note: "開発環境のコンテナ化、docker-composeでの構成管理",
+      },
+      {
+        name: "CI/CD(GitHub Actions)",
+        level: 4,
+        years: "3年",
+        note: "テスト・ビルド・デプロイの自動化パイプライン構築",
+      },
+    ],
+  },
+  {
+    name: "自動化 / DB",
+    skills: [
+      {
+        name: "GAS(Google Apps Script)",
+        level: 4,
+        years: "3年",
+        note: "スプレッドシート連携、定型業務・レポートの自動化",
+      },
+      {
+        name: "Python自動化",
+        level: 3,
+        years: "2年",
+        note: "スクレイピング、データ集計、定期実行バッチ",
+      },
+      {
+        name: "PostgreSQL / MySQL",
+        level: 3,
+        years: "3年",
+        note: "スキーマ設計、クエリ最適化、運用",
+      },
+      {
+        name: "Firebase",
+        level: 3,
+        years: "2年",
+        note: "Authentication / Firestore を用いた小規模アプリ開発",
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="Skills | Portfolio"
+  description="フロントエンド・バックエンド・CMS/EC・インフラ・自動化/DBの対応スキル一覧。"
+>
+  <section class="section">
+    <div class="container skills-container">
+      <h1 class="section-title">Skills</h1>
+      <p class="section-sub">対応スキルと習熟度</p>
+
+      <p class="legend">
+        習熟度の目安:
+        <span class="legend-item">5 = 設計から任せられる</span>
+        <span class="legend-item">3 = 実務で一通り対応可能</span>
+        <span class="legend-item">1 = 学習中</span>
+      </p>
+
+      {
+        skillCategories.map((category) => (
+          <div class="skill-category reveal">
+            <h2 class="category-title">{category.name}</h2>
+            <ul class="skill-list">
+              {category.skills.map((skill) => (
+                <li class="card skill-row">
+                  <div class="skill-head">
+                    <p class="skill-name">{skill.name}</p>
+                    <p class="skill-years">{skill.years}</p>
+                  </div>
+                  <div
+                    class="skill-meter"
+                    role="img"
+                    aria-label={`習熟度 ${skill.level} / 5`}
+                  >
+                    {Array.from({ length: 5 }, (_, i) => (
+                      <span
+                        class:list={["meter-seg", { on: i < skill.level }]}
+                      />
+                    ))}
+                    <span class="meter-value">{skill.level}/5</span>
+                  </div>
+                  <p class="skill-note">{skill.note}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .skills-container {
+    max-width: 820px;
+  }
+
+  .legend {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--c-text-soft);
+    margin: -1.4rem 0 2.6rem;
+    display: flex;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+  }
+
+  .skill-category {
+    margin-bottom: 3rem;
+  }
+
+  .category-title {
+    font-size: 1.25rem;
+    margin: 0 0 1.1rem;
+    padding-left: 0.75rem;
+    border-left: 4px solid var(--c-primary);
+  }
+
+  .skill-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .skill-row {
+    padding: 1.1rem 1.4rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "head meter"
+      "note note";
+    gap: 0.4rem 1.5rem;
+    align-items: center;
+  }
+
+  .skill-head {
+    grid-area: head;
+    display: flex;
+    align-items: baseline;
+    gap: 0.8rem;
+  }
+
+  .skill-name {
+    margin: 0;
+    font-weight: 700;
+    font-size: 0.98rem;
+  }
+
+  .skill-years {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--c-text-soft);
+  }
+
+  .skill-meter {
+    grid-area: meter;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .meter-seg {
+    width: 22px;
+    height: 7px;
+    border-radius: 2px;
+    background: var(--c-border);
+  }
+
+  .meter-seg.on {
+    background: var(--c-primary);
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.45);
+  }
+
+  .meter-value {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--c-text-soft);
+    margin-left: 0.5rem;
+  }
+
+  .skill-note {
+    grid-area: note;
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--c-text-soft);
+  }
+
+  @media (max-width: 600px) {
+    .skill-row {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "head"
+        "meter"
+        "note";
+    }
+  }
+</style>

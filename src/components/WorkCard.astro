@@ -1,0 +1,88 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  work: CollectionEntry<"works">;
+}
+
+const { work } = Astro.props;
+
+const formatDate = (date: Date) =>
+  date.toLocaleDateString("ja-JP", { year: "numeric", month: "long" });
+---
+
+<a
+  href={`/works/${work.id}/`}
+  class="card work-card"
+  data-category={work.data.category}
+>
+  <div class="work-meta">
+    <span class="work-cat">{work.data.category}</span>
+    <span class="work-date">{formatDate(work.data.date)}</span>
+  </div>
+  <h3 class="work-title">{work.data.title}</h3>
+  <p class="work-desc">{work.data.description}</p>
+  <div class="work-tags">
+    {work.data.tags.map((tag) => <span class="tag">{tag}</span>)}
+  </div>
+</a>
+
+<style>
+  .work-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    padding: 1.4rem 1.5rem 1.5rem;
+  }
+
+  .work-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 3px;
+    background: var(--grad-main);
+  }
+
+  .work-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.7rem;
+  }
+
+  .work-cat {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--c-teal);
+    border: 1px solid rgba(0, 255, 157, 0.3);
+    border-radius: 4px;
+    padding: 0.05rem 0.5rem;
+  }
+
+  .work-date {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--c-text-soft);
+  }
+
+  .work-title {
+    margin: 0 0 0.5rem;
+    font-size: 1.08rem;
+  }
+
+  .work-desc {
+    margin: 0 0 1rem;
+    font-size: 0.86rem;
+    color: var(--c-text-soft);
+    line-height: 1.7;
+    flex: 1;
+  }
+
+  .work-tags {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+</style>

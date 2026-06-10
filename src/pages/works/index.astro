@@ -1,0 +1,96 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import WorkCard from "../../components/WorkCard.astro";
+
+const works = (await getCollection("works")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+const categories = [...new Set(works.map((work) => work.data.category))];
+---
+
+<BaseLayout title="Works | Portfolio" description="制作実績の一覧です。カテゴリで絞り込みができます。">
+  <section class="section">
+    <div class="container">
+      <h1 class="section-title">Works</h1>
+      <p class="section-sub">これまでの制作実績</p>
+
+      <div class="filter" role="group" aria-label="カテゴリで絞り込み">
+        <button class="filter-btn active" data-category="all">すべて</button>
+        {
+          categories.map((category) => (
+            <button class="filter-btn" data-category={category}>
+              {category}
+            </button>
+          ))
+        }
+      </div>
+
+      <div class="works-grid">
+        {works.map((work) => <WorkCard work={work} />)}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>(".filter-btn");
+  const cards = document.querySelectorAll<HTMLElement>(".work-card");
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      buttons.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      const category = btn.dataset.category;
+      cards.forEach((card) => {
+        const show = category === "all" || card.dataset.category === category;
+        card.style.display = show ? "" : "none";
+      });
+    });
+  });
+</script>
+
+<style>
+  .filter {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin-bottom: 2.2rem;
+  }
+
+  .filter-btn {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--c-text-soft);
+    background: var(--c-card);
+    border: 1px solid var(--c-border);
+    border-radius: 6px;
+    padding: 0.45rem 1.1rem;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .filter-btn:hover {
+    color: var(--c-primary);
+    border-color: rgba(0, 229, 255, 0.4);
+  }
+
+  .filter-btn.active {
+    color: var(--c-primary);
+    border-color: var(--c-primary);
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.25);
+  }
+
+  .works-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.6rem;
+  }
+
+  @media (max-width: 860px) {
+    .works-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,195 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+// Formspree などのフォームサービスに登録して、発行されたエンドポイントに差し替えてください。
+// 例: https://formspree.io/f/xxxxxxxx
+const FORM_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
+
+const EMAIL = "blue.blue210@gmail.com";
+// ご自身のGitHubユーザー名に差し替えてください。
+const GITHUB_URL = "https://github.com/your-username";
+---
+
+<BaseLayout title="Contact | Portfolio" description="お仕事のご依頼・ご相談はこちらから。">
+  <section class="section">
+    <div class="container contact-container">
+      <h1 class="section-title">Contact</h1>
+      <p class="section-sub">お仕事のご依頼・ご相談はこちらから</p>
+
+      <div class="channels">
+        <a href={`mailto:${EMAIL}`} class="card channel">
+          <p class="channel-label">Email</p>
+          <p class="channel-value">{EMAIL}</p>
+          <p class="channel-note">メールでのご連絡はこちら</p>
+        </a>
+        <a
+          href={GITHUB_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="card channel"
+        >
+          <p class="channel-label">GitHub</p>
+          <p class="channel-value">{GITHUB_URL.replace("https://", "")}</p>
+          <p class="channel-note">コードや活動状況はこちら</p>
+        </a>
+      </div>
+
+      <div class="card contact-card">
+        <h2 class="form-title">お問い合わせフォーム</h2>
+        <form action={FORM_ENDPOINT} method="POST" class="contact-form">
+          <label class="field">
+            <span class="field-label">お名前 <em>必須</em></span>
+            <input type="text" name="name" required placeholder="山田 太郎" />
+          </label>
+          <label class="field">
+            <span class="field-label">メールアドレス <em>必須</em></span>
+            <input
+              type="email"
+              name="email"
+              required
+              placeholder="example@example.com"
+            />
+          </label>
+          <label class="field">
+            <span class="field-label">ご相談内容 <em>必須</em></span>
+            <textarea
+              name="message"
+              rows="6"
+              required
+              placeholder="ご依頼内容、ご予算、希望納期などをお書きください"></textarea>
+          </label>
+          <button type="submit" class="btn btn-primary">送信する</button>
+        </form>
+      </div>
+
+      <p class="contact-note">通常 2 営業日以内にご返信します。</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-container {
+    max-width: 640px;
+  }
+
+  .channels {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .channel {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    padding: 1.3rem 1.5rem;
+  }
+
+  .channel-label {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--c-primary);
+    margin: 0 0 0.3rem;
+  }
+
+  .channel-label::before {
+    content: "// ";
+    color: var(--c-text-soft);
+  }
+
+  .channel-value {
+    font-family: var(--font-mono);
+    font-size: 0.92rem;
+    font-weight: 700;
+    margin: 0 0 0.3rem;
+    word-break: break-all;
+  }
+
+  .channel-note {
+    font-size: 0.8rem;
+    color: var(--c-text-soft);
+    margin: 0;
+  }
+
+  .contact-card {
+    padding: 2.2rem;
+  }
+
+  .form-title {
+    margin: 0 0 1.4rem;
+    font-size: 1.15rem;
+  }
+
+  .contact-form {
+    display: grid;
+    gap: 1.4rem;
+  }
+
+  .field {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .field-label {
+    font-weight: 700;
+    font-size: 0.92rem;
+  }
+
+  .field-label em {
+    font-style: normal;
+    font-size: 0.72rem;
+    color: #060914;
+    background: var(--c-accent);
+    border-radius: 4px;
+    padding: 0.08rem 0.55rem;
+    margin-left: 0.4rem;
+    vertical-align: middle;
+  }
+
+  input,
+  textarea {
+    font: inherit;
+    color: var(--c-text);
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--c-border);
+    border-radius: 8px;
+    background: var(--c-bg-soft);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    resize: vertical;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--c-text-soft);
+    opacity: 0.6;
+  }
+
+  input:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--c-primary);
+    box-shadow: 0 0 12px rgba(0, 229, 255, 0.2);
+  }
+
+  button.btn {
+    border: none;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+    justify-self: start;
+  }
+
+  .contact-note {
+    margin-top: 1.6rem;
+    font-size: 0.85rem;
+    color: var(--c-text-soft);
+    text-align: center;
+  }
+
+  @media (max-width: 560px) {
+    .channels {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
