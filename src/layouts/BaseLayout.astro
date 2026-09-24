@@ -21,6 +21,15 @@ const nav = [
   { href: "/contact/", label: "Contact" },
 ];
 
+// フッターに載せる制作サイト（外部リンク）
+const footerSites = [
+  {
+    label: "社会人におすすめのビジネス書ランキング",
+    href: "https://business.douga-summary.jp/",
+  },
+  { label: "Anime Buzz", href: "https://anime.douga-summary.jp/" },
+];
+
 const current = Astro.url.pathname;
 ---
 
@@ -90,6 +99,25 @@ const current = Astro.url.pathname;
     <footer class="site-footer">
       <div class="container">
         <p class="footer-logo"><span class="logo-prompt">~/</span>miton310's portfolio</p>
+        <nav class="footer-sites" aria-label="制作サイト">
+          <p class="footer-sites-label">制作サイト</p>
+          <ul class="footer-sites-list">
+            {
+              footerSites.map((site) => (
+                <li>
+                  <a
+                    href={site.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="footer-site-link"
+                  >
+                    {site.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
         <p class="footer-copy">
           &copy; {new Date().getFullYear()} miton310's portfolio. All rights reserved.
         </p>
@@ -238,10 +266,50 @@ const current = Astro.url.pathname;
     margin: 0;
   }
 
+  .footer-sites {
+    margin: 1.6rem 0 0;
+  }
+
+  .footer-sites-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    color: var(--c-text-soft);
+    margin: 0 0 0.6rem;
+  }
+
+  .footer-sites-label::before {
+    content: "// ";
+    color: var(--c-teal);
+  }
+
+  .footer-sites-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem 1.4rem;
+  }
+
+  .footer-site-link {
+    font-size: 0.85rem;
+    color: var(--c-text-soft);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .footer-site-link:hover {
+    color: var(--c-primary);
+    border-bottom-color: var(--c-primary);
+  }
+
   .footer-copy {
     color: var(--c-text-soft);
     font-size: 0.85rem;
-    margin: 0.4rem 0 0;
+    margin: 1.6rem 0 0;
   }
 
   @media (max-width: 720px) {

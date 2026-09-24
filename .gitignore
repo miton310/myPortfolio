@@ -17,6 +17,9 @@ pnpm-debug.log*
 .env
 .env.production
 
+# メールフォームの秘密鍵（サーバーごとに設定。コミットしない）
+public/mail.config.php
+
 # macOS-specific files
 .DS_Store
 

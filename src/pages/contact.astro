@@ -9,6 +9,10 @@ const EMAIL = "info@dokkoi.jp";
 const GITHUB_URL = "https://github.com/miton310";
 const X_URL = "https://x.com/UptownGirlsBand";
 const QIITA_URL = "https://qiita.com/miton";
+
+// Cloudflare Turnstile のサイトキー（公開鍵）。管理画面で取得した値に置き換える。
+// ※これは公開してよい鍵。シークレットキーは public/mail.php 側に設定する。
+const TURNSTILE_SITE_KEY = "0x4AAAAAABvBN4vXt6enxnBd";
 ---
 
 <BaseLayout title="Contact | Portfolio" description="お仕事のご依頼・ご相談はこちらから。">
@@ -86,6 +90,14 @@ const QIITA_URL = "https://qiita.com/miton";
               <input type="text" name="website" tabindex="-1" autocomplete="off" />
             </label>
           </div>
+          {/* Cloudflare Turnstile（ボット対策）。トークンは cf-turnstile-response で送信される */}
+          <div
+            class="cf-turnstile"
+            data-sitekey={TURNSTILE_SITE_KEY}
+            data-theme="dark"
+            data-language="ja"
+          >
+          </div>
           <p class="form-status" role="status" aria-live="polite"></p>
           <button type="submit" class="btn btn-primary">送信する</button>
         </form>
@@ -95,6 +107,9 @@ const QIITA_URL = "https://qiita.com/miton";
     </div>
   </section>
 </BaseLayout>
+
+{/* Cloudflare Turnstile のスクリプト。class="cf-turnstile" の要素を自動描画する */}
+<script is:inline async defer src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>
 
 <script>
   const form = document.querySelector<HTMLFormElement>(".contact-form");
@@ -107,6 +122,18 @@ const QIITA_URL = "https://qiita.com/miton";
       event.preventDefault();
       statusEl.textContent = "";
       statusEl.className = "form-status";
+
+      // Turnstile のトークンが無ければ送信しない（未認証・期限切れ対策）
+      const tokenField = form.querySelector<HTMLInputElement>(
+        '[name="cf-turnstile-response"]',
+      );
+      if (!tokenField || !tokenField.value) {
+        statusEl.textContent =
+          "認証が完了していません。少し待つか、認証にチェックを入れてから送信してください。";
+        statusEl.classList.add("is-error");
+        return;
+      }
+
       if (button) {
         button.disabled = true;
         button.textContent = "送信中…";
@@ -142,6 +169,8 @@ const QIITA_URL = "https://qiita.com/miton";
           button.disabled = false;
           button.textContent = "送信する";
         }
+        // トークンは1回で失効するため、ウィジェットをリセットして再取得させる
+        (window as unknown as { turnstile?: { reset: () => void } }).turnstile?.reset();
       }
     });
   }

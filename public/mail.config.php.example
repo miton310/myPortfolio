@@ -1,0 +1,17 @@
+<?php
+/**
+ * メールフォームの秘密設定ファイル（見本）。
+ *
+ * 使い方:
+ *   1. このファイルを同じ場所に「mail.config.php」という名前でコピーする
+ *   2. 下記の値を Cloudflare Turnstile のシークレットキーに置き換える
+ *   3. mail.config.php は .gitignore 済みなので git には入らない（サーバーには
+ *      dist/ 経由でアップロードされる）
+ *
+ * ここに書いた値を return すると、mail.php がそれを秘密鍵として使う。
+ */
+
+return [
+    // Cloudflare Turnstile のシークレットキー（秘密鍵）
+    'turnstile_secret' => 'YOUR_TURNSTILE_SECRET_KEY',
+];

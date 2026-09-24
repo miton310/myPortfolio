@@ -18,6 +18,23 @@ $from    = 'noreply@dokkoi.jp';              // 送信元（dokkoi.jp 上に実�
 $subject = '【お問い合わせ】ポートフォリオサイト';
 $subjectAutoReply = '【dokkoi.jp】お問い合わせありがとうございます';
 
+// Cloudflare Turnstile のシークレットキー（秘密鍵）。
+// 解決順: 秘密設定ファイル(mail.config.php) → 環境変数 TURNSTILE_SECRET → プレースホルダ。
+// mail.config.php は git 管理外。見本は mail.config.php.example を参照。
+// ※プレースホルダのままだと Turnstile 検証はスキップされる（ローカル確認用のフェイルオープン）。
+$turnstileSecret = 'YOUR_TURNSTILE_SECRET_KEY';
+
+$mailConfigFile = __DIR__ . '/mail.config.php';
+if (is_file($mailConfigFile)) {
+    $mailConfig = require $mailConfigFile;
+    if (is_array($mailConfig) && !empty($mailConfig['turnstile_secret'])) {
+        $turnstileSecret = (string)$mailConfig['turnstile_secret'];
+    }
+}
+if ($turnstileSecret === 'YOUR_TURNSTILE_SECRET_KEY' && getenv('TURNSTILE_SECRET')) {
+    $turnstileSecret = (string)getenv('TURNSTILE_SECRET');
+}
+
 // ===== 日本語メールの初期設定 =====
 mb_language('Japanese');
 mb_internal_encoding('UTF-8');
@@ -83,6 +100,33 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
 // 人間には見えない hidden 項目。値が入っていたらボットとみなし、成功を装って終了。
 if (trim((string)($_POST['website'] ?? '')) !== '') {
     respond(true, 'お問い合わせを送信しました。ありがとうございます。', $isAjax);
+}
+
+// ===== Cloudflare Turnstile 検証 =====
+// シークレットが設定済みのときだけ検証する（未設定＝プレースホルダのままなら通す）。
+if ($turnstileSecret !== '' && $turnstileSecret !== 'YOUR_TURNSTILE_SECRET_KEY') {
+    $token = trim((string)($_POST['cf-turnstile-response'] ?? ''));
+    if ($token === '') {
+        respond(false, '認証が確認できませんでした。ページを再読み込みしてお試しください。', $isAjax);
+    }
+
+    $ch = curl_init('https://challenges.cloudflare.com/turnstile/v0/siteverify');
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST           => true,
+        CURLOPT_POSTFIELDS     => http_build_query([
+            'secret'   => $turnstileSecret,
+            'response' => $token,
+            'remoteip' => $_SERVER['REMOTE_ADDR'] ?? '',
+        ]),
+        CURLOPT_TIMEOUT        => 10,
+    ]);
+    $verifyRaw = curl_exec($ch);
+
+    $verify = is_string($verifyRaw) ? json_decode($verifyRaw, true) : null;
+    if (!is_array($verify) || empty($verify['success'])) {
+        respond(false, '認証に失敗しました。お手数ですが再度お試しください。', $isAjax);
+    }
 }
 
 // ===== 入力値の取得 =====
